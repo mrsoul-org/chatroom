@@ -26,5 +26,11 @@ pipeline{
                 sh 'mvn package'
             }
         }
+        stage('run the application'){
+            steps{
+                sh 'cd target'
+                sh 'mv *.war /usr/local/tomcat/webapps/ROOT.war'
+            }
+        }
     }
 }
