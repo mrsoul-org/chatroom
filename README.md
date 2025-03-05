@@ -51,12 +51,20 @@ A real-time chatroom web application built using Java 17, Spring Boot, WebSocket
 
 5. **Deploy the Application on Artifactory**
    ```sh
-   mvn clean deploy   
+   mvn clean deploy
    ```
    or
+   
    ```sh
    curl -v -u admin:password --upload-file target/chatroom-0.0.1-SNAPSHOT.jar "http://<IP_ADDRESS>:8081/repository/maven-snapshots/com/goldencat/chatroom/0.0.1-SNAPSHOT/chatroom-0.0.1-SNAPSHOT.jar"
    ```
+
+## Trivy Scan
+to scan files using trivy
+```sh
+trivy fs --security-checks vuln --severity HIGH,CRITICAL Folder_name_OR_Path
+```
+you can use --severity (LOW,MEDIUM,HIGH,CRITICAL)
 
 ## Usage
 
