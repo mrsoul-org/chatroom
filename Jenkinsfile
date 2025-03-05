@@ -28,8 +28,7 @@ pipeline{
         }
         stage('run the application'){
             steps{
-                sh 'cd target'
-                sh 'mv *.war /usr/local/tomcat/webapps/ROOT.war'
+                sh 'cd target && mv *.war /usr/local/tomcat/webapps/ROOT.war'
             }
         }
     }
