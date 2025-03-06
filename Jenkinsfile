@@ -6,6 +6,11 @@ pipeline{
     }
 
     stages{
+        stage ('clean workspace'){
+            steps{
+                cleanWs()
+            }
+        }
         stage('clone'){
             steps{
                 git 'https://github.com/VootlaSaiCharan/chatroom.git'
@@ -19,6 +24,11 @@ pipeline{
         stage('test'){
             steps{
                 sh 'mvn test'
+            }
+        }
+        stage('trivy scan files'){
+            steps{
+                sh 'trivy fs --formate table  -o fs.html .' 
             }
         }
         stage('package'){
