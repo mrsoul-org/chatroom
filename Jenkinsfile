@@ -48,6 +48,13 @@ pipeline{
                 sh 'mvn package'
             }
         }
+        stage('deploy'){
+            steps{
+                withMaven(globalMavenSettingsConfig: 'maven-setting', jdk: '', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
+                    sh 'mvn deploy'
+                }
+            }
+        }
         stage('run the application'){
             steps{
                 sh 'cd target && mv *.war /usr/local/tomcat/webapps/ROOT.war'
