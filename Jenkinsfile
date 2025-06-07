@@ -12,11 +12,6 @@ pipeline{
                 cleanWs()
             }
         }
-        stage('clone') {
-            steps{
-                git 'https://github.com/VootlaSaiCharan/chatroom.git'
-            }
-        }
         stage('validation') {
             steps{
                 sh 'mvn clean validate'
