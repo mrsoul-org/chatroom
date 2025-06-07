@@ -5,7 +5,6 @@ pipeline{
     }
     environment {
         SCANNER_HOME = tool 'sonarqube-scanner'
-        BUILD_NO = "${env.BUILD_NUMBER}"
     }
     stages  {
         stage('clean workspace') {
@@ -74,7 +73,7 @@ pipeline{
         }
         stage('Docker build') {
             steps{
-                sh 'docker build -t vootlasaicharan/chatroom-application:${BUILD_NUMBER} .'
+                sh 'docker build -t vootlasaicharan/chatroom-application:latest .'
             }
         }
         stage('Trivy image scan') {
@@ -98,7 +97,7 @@ pipeline{
             steps{
                 script{
                     withDockerRegistry(credentialsId: 'docker-cred') {
-                        sh 'docker push vootlasaicharan/chatroom-application:${BUILD_NUMBER}'
+                        sh 'docker push vootlasaicharan/chatroom-application:latest'
                     }
                 }
             }
@@ -113,7 +112,7 @@ pipeline{
                         withAWS(credentials: 'aws-ec2-s3-cred', region: 'us-east-1') {
                             // sh '''
                             //     scp -o StrictHostKeyChecking=no deploy.sh ubuntu@35.174.14.246:/tmp/deploy.sh
-                            //     ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 "export BUILD_NUMBER=${BUILD_NUMBER} && bash /tmp/deploy.sh"
+                            //     ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 "export BUILD_NUMBER=latest && bash /tmp/deploy.sh"
                             // '''
                             sh '''
                                 scp -o StrictHostKeyChecking=no deploy.sh ubuntu@35.174.14.246:/tmp/deploy.sh
