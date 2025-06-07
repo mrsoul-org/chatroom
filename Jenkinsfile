@@ -110,20 +110,22 @@ pipeline{
                 script {
                     sshagent(['aws-dev-instance']) {
                         sh '''
-                            ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 "
+                            ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 <<'EOF'
                                 if docker ps -a | grep -q 'chatroom-application'; then
                                     echo "Container exists, stopping and removing it..."
-                                    docker stop chatroom-application && docker rm chatroom-application
+                                    docker stop chatroom-application || true
+                                    docker rm chatroom-application || true
                                     echo "Container stopped and removed."
                                 fi
+
+                                sudo docker run -itd --name chatroom-application -p 8080:8080 vootlasaicharan/chatroom-application:${BUILD_NUMBER} || true
                                 exit 0
-                                sudo docker run -itd --name chatroom-application -p 8080:8080 vootlasaicharan/chatroom-application:${BUILD_NUMBER}
-                            "
+EOF
                         '''
                     }
                 }
             }
-        }   
+        }
     }
     post{
         always{
