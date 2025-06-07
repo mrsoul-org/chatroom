@@ -13,6 +13,11 @@ pipeline{
                 checkout scm // re-fetch your source code after cleaning
             }
         }
+        stage('Show Branch') {
+            steps {
+                echo "Current Branch Name: ${env.BRANCH_NAME}"
+            }
+        }
         stage('validation') {
             steps{
                 sh 'mvn clean validate'
@@ -99,9 +104,7 @@ pipeline{
         }
         stage('Deploy to EC2 Instance') {
             when {
-                expression {
-                    return env.BRANCH_NAME ==~ /^feature\/.*/
-                }
+                branch 'feature/*'
             }
             steps{
                 script{
