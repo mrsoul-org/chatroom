@@ -109,15 +109,15 @@ pipeline{
             }
             steps {
                 script {
-                    sshagent(['aws-dev-deploy-ec2-instance']) {
-                        sh '''
+                    sshagent(['aws-dev-instance']) {
+                        sh ''' 
                             ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 "
-                                if sudo docker ps -a | grep -q "chatroom-application"; then
-                                    echo "Container found. Stopping..."
-                                        sudo docker stop "chatroom-application" && sudo docker rm "chatroom-application"
-                                    echo "Container stopped and removed."
+                                if docker ps -a | grep -q "chatroom-application"; then
+                                    echo 'Stopping and removing existing container...'
+                                    docker stop "chatroom-application" && docker rm "chatroom-application" && docker rmi $(docker images -q) || true
+                                    echo 'Container stopped and removed.'
                                 fi
-                                    docker run -d --name chatroom-application -p 8080:8080 vootlasaicharan/chatroom-application:${BUILD_NO}
+                                sudo docker run -itd --name chatroom-application -p 8080:8080 vootlasaicharan/chatroom-application:${BUILD_NUMBER}
                             "
                         '''
                     }
