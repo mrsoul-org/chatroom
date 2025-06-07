@@ -10,6 +10,7 @@ pipeline{
         stage('clean workspace') {
             steps{
                 cleanWs()
+                checkout scm // re-fetch your source code after cleaning
             }
         }
         stage('validation') {
