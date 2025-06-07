@@ -78,8 +78,8 @@ pipeline{
         }
         stage('Trivy image scan') {
             steps{
-                sh ''' trivy image --severity LOW,MEDIUM,HIGH --format json -o trivy-image-HIGH-result.json --exit-code 0 vootlasaicharan/chatroom-application:${BUILD_NUMBER}
-                 trivy image --severity CRITICAL --format json -o trivy-image-CRITICAL-result.json --exit-code 0 vootlasaicharan/chatroom-application:${BUILD_NUMBER}'''
+                sh ''' trivy image --severity LOW,MEDIUM,HIGH --format json -o trivy-image-HIGH-result.json --exit-code 0 vootlasaicharan/chatroom-application:latest
+                 trivy image --severity CRITICAL --format json -o trivy-image-CRITICAL-result.json --exit-code 0 vootlasaicharan/chatroom-application:latest'''
             }
             post{
                 always {
