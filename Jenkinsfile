@@ -115,7 +115,7 @@ pipeline{
                             docker rm $(docker ps -aq) || true
                             docker rmi $(docker images -q) || tru
                             docker run -itd --name chatroom-application -p 8080:8080 vootlasaicharan/chatroom-application:${BUILD_NUMBER}
-                            EOF
+EOF
                         """
                     }
                 }
