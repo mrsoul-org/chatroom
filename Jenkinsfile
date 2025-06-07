@@ -109,12 +109,13 @@ pipeline{
             steps{
                 script{
                     sshagent(['aws-dev-instance']) {
-                        sh '''ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 
+                        sh '''ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246"
                         docker stop $(docker ps -aq) || true
                         docker rm $(docker ps -aq) || true
+                        docker rmi $(docker images -q) || true
                         
                         docker run -itd --name chatroom-application \
-                        -p 7000:7000 vootlasaicharan/chatroom-application:${BUILD_NUMBER}'''
+                        -p 7000:7000 vootlasaicharan/chatroom-application:${BUILD_NUMBER}"'''
                     }
                 }
             }
