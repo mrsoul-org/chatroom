@@ -113,8 +113,6 @@ pipeline{
                         withAWS(credentials: 'aws-ec2-s3-cred', region: 'us-east-1') {
                             ssh '''
                                 scp -o StrictHostKeyChecking=no deploy.sh ubuntu@35.174.14.246:/tmp/deploy.sh
-                            '''
-                            sh '''
                                 ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 'bash /tmp/deploy.sh' 
                             '''
                         }
