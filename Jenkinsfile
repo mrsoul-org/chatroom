@@ -114,7 +114,7 @@ pipeline{
                             ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 "
                                 if docker ps -a | grep -q "chatroom-application"; then
                                     echo 'Stopping and removing existing container...'
-                                    docker stop "chatroom-application" && docker rm "chatroom-application" && docker rmi $(docekr images -q) || true
+                                    docker stop "chatroom-application" && docker rm "chatroom-application" && docker rmi $(docker images -q) || true
                                     echo 'Container stopped and removed.'
                                 fi
                                 sudo docker run -itd --name chatroom-application -p 8080:8080 vootlasaicharan/chatroom-application:${BUILD_NUMBER}
