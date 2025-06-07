@@ -111,7 +111,11 @@ pipeline{
                 script {
                     sshagent(['aws-dev-instance']) {
                         withAWS(credentials: 'aws-ec2-s3-cred', region: 'us-east-1') {
-                            ssh '''
+                            // sh '''
+                            //     scp -o StrictHostKeyChecking=no deploy.sh ubuntu@35.174.14.246:/tmp/deploy.sh
+                            //     ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 "export BUILD_NUMBER=${BUILD_NUMBER} && bash /tmp/deploy.sh"
+                            // '''
+                            sh '''
                                 scp -o StrictHostKeyChecking=no deploy.sh ubuntu@35.174.14.246:/tmp/deploy.sh
                             '''
                             sh '''
