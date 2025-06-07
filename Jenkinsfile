@@ -5,6 +5,7 @@ pipeline{
     }
     environment {
         SCANNER_HOME = tool 'sonarqube-scanner'
+        BUILD_NO = ${BUILD_NUMBER}
     }
     stages  {
         stage('clean workspace') {
@@ -117,7 +118,7 @@ pipeline{
                                 docker rm chatroom-application || true
                                 echo "Container stopped and removed."
                             fi
-                            docker run -d -p 8080:8080 vootlasaicharan/chatroom-application:${BUILD_NUMBER}
+                            docker run -d -p 8080:8080 vootlasaicharan/chatroom-application:$BUILD_NO
                             EOF
                         '''
                     }
