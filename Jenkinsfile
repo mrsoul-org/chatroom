@@ -113,7 +113,7 @@ pipeline{
                             ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 "
                                 if docker ps -a | grep -q 'chatroom-application'; then
                                     echo "Container exists, stopping and removing it..."
-                                    docker stop chatroom-application && docker rm chatroom-application || true
+                                    docker stop chatroom-application && docker rm chatroom-application
                                     echo "Container stopped and removed."
                                 fi
 
