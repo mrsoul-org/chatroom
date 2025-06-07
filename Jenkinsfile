@@ -5,8 +5,8 @@ pipeline{
     }
     environment {
         SCANNER_HOME = tool 'sonarqube-scanner'
-        BUILD_NO = ${BUILD_NUMBER}
-    }
+        BUILD_NO = "${env.BUILD_NUMBER}"
+    }"
     stages  {
         stage('clean workspace') {
             steps{
