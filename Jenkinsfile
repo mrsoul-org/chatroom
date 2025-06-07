@@ -109,18 +109,18 @@ pipeline{
             steps {
                 script {
                     sshagent(['aws-dev-instance']) {
-                        sh """
+                        sh '''
                             ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 <<EOF
-                            docker stop $(docker ps -aq ) || true
-                            docker rm $(docker ps -aq ) || true 
-                            docekr rmi $(docker images -q ) || true
+                            docker stop $(docker ps -aq) || true
+                            docker rm $(docker ps -aq) || true
+                            docker rmi $(docker images -q) || true
                             docker run -itd --name chatroom-application -p 8080:8080 vootlasaicharan/chatroom-application:${BUILD_NUMBER}
 EOF
-                        """
+                        '''
                     }
                 }
             }
-        }
+        }   
     }
     post{
         always{
