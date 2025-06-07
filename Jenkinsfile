@@ -101,10 +101,20 @@ pipeline{
                 }
             }
         }
-        stage('Run Inside the EC2 Instance') {
+        stage('Deploy to EC2 Instance') {
+            when {
+                branch 'feature/*'
+            }
             steps{
                 script{
-                    
+                    sshagent(['aws-dev-instance']) {
+                        sh '''ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 
+                        docker ps $(docker stop -aq) || true
+                        docker ps $(docker rm -aq) || true
+
+                        docker run -itd --name chatroom-application \
+                        -p 7000:7000 vootlasaicharan/chatroom-application:${BUILD_NUMBER}'''
+                    }
                 }
             }
         }
