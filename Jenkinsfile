@@ -116,7 +116,7 @@ pipeline{
                                     docker stop chatroom-application && docker rm chatroom-application
                                     echo "Container stopped and removed."
                                 fi
-
+                                exit 0
                                 sudo docker run -itd --name chatroom-application -p 8080:8080 vootlasaicharan/chatroom-application:${BUILD_NUMBER}
                             "
                         '''
