@@ -11,4 +11,4 @@ if docker ps -a | grep -q "$CONTAINER_NAME"; then
 fi
 
 # Run the new container
-sudo docker run -itd --name "$CONTAINER_NAME" -p 8080:8080 "$IMAGE_NAME"
+docker run -itd --name "$CONTAINER_NAME" -p 8080:8080 "$IMAGE_NAME"
