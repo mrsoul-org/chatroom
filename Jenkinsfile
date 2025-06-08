@@ -115,10 +115,10 @@ pipeline{
                             //     ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 "export BUILD_NUMBER=latest && bash /tmp/deploy.sh"
                             // '''
                             sh '''
-                                scp -o StrictHostKeyChecking=no deploy.sh ubuntu@35.174.14.246:/tmp/deploy.sh
+                                scp -o StrictHostKeyChecking=no deploy.sh ubuntu@44.203.120.18:/tmp/deploy.sh
                             '''
                             sh '''
-                                ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 'bash /tmp/deploy.sh || true'
+                                ssh -o StrictHostKeyChecking=no ubuntu@44.203.120.18 'bash /tmp/deploy.sh || true'
                             '''
                         }
                     }
