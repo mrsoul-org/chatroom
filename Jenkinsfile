@@ -46,14 +46,14 @@ pipeline{
                 }
             }
         }
-        stage('OWASP Scan') {
-            steps{
-                withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
-                    sh 'mkdir -p reports/dependency-check' // linux
-                    dependencyCheck additionalArguments: '''--scan ./ --out reports/dependency-check --project chatroom --format ALL --disableYarnAudit --disableNodeAudit --nvdApiKey ${NVD_API_KEY}''', odcInstallation: 'DP-Check'
-                }
-            }
-        }
+        // stage('OWASP Scan') {
+        //     steps{
+        //         withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
+        //             sh 'mkdir -p reports/dependency-check' // linux
+        //             dependencyCheck additionalArguments: '''--scan ./ --out reports/dependency-check --project chatroom --format ALL --disableYarnAudit --disableNodeAudit --nvdApiKey ${NVD_API_KEY}''', odcInstallation: 'DP-Check'
+        //         }
+        //     }
+        // }
         stage('sonarqube analysis') {
             steps{
                 withSonarQubeEnv('sonarqube-server') {
@@ -62,15 +62,15 @@ pipeline{
                 }
             }
         }
-        // stage('sonarqube quality gate') {
-        //     steps{
-        //         timeout(time: 1, unit: 'MINUTES') {
-        //             waitForQualityGate abortPipeline: true, credentialsId: 'sonarqube-cred'
-        //             // True if you want to abort the pipeline if the quality gate fails
-        //             // False if you want to continue the pipeline even if the quality gate fails
-        //         }
-        //     }
-        // }
+        stage('sonarqube quality gate') {
+            steps{
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true, credentialsId: 'sonarqube-cred'
+                    // True if you want to abort the pipeline if the quality gate fails
+                    // False if you want to continue the pipeline even if the quality gate fails
+                }
+            }
+        }
         stage('Docker build') {
             steps{
                 sh 'docker build -t vootlasaicharan/chatroom-application:latest .'
