@@ -110,16 +110,17 @@ pipeline{
                 script {
                     sshagent(['aws-dev-instance']) {
                         withAWS(credentials: 'aws-ec2-s3-cred', region: 'us-east-1') {
-                            // sh '''
-                            //     scp -o StrictHostKeyChecking=no deploy.sh ubuntu@35.174.14.246:/tmp/deploy.sh
-                            //     ssh -o StrictHostKeyChecking=no ubuntu@35.174.14.246 "export BUILD_NUMBER=latest && bash /tmp/deploy.sh"
-                            // '''
                             sh '''
                                 scp -o StrictHostKeyChecking=no deploy.sh ubuntu@44.203.120.18:/tmp/deploy.sh
                             '''
-                            sh '''
-                                ssh -o StrictHostKeyChecking=no ubuntu@44.203.120.18 'bash /tmp/deploy.sh || true'
-                            '''
+                            // Capture exit status so Jenkins doesn't fail the build
+                            def status = sh(
+                                script: "ssh -o StrictHostKeyChecking=no ubuntu@44.203.120.18 'bash /tmp/deploy.sh'",
+                                returnStatus: true
+                            )
+                            if (status != 0) {
+                                echo "Deployment script exited with non-zero status: ${status}, but continuing the pipeline."
+                            }
                         }
                     }
                 }
