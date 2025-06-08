@@ -122,8 +122,8 @@ pipeline{
                                 echo "Deployment script exited with non-zero status: ${status}, but continuing the pipeline."
                             }
                         }
+                        sh 'exit 0'
                     }
-                    sh 'exit 0'
                 }
             }
         }
