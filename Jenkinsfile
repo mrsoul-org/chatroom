@@ -123,7 +123,7 @@ pipeline{
                             }
                         }
                         sh 'exit 0'
-                        CurrentBuild.result = 'SUCCESS' // Ensure the build is marked as successful
+                        currentBuild.result = 'SUCCESS'  // Ensure the build is marked as successful
                     }
                 }
             }
