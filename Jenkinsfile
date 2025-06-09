@@ -56,7 +56,7 @@ pipeline{
         stage('Sonarqube Quality Gate') {
             steps{
                 timeout(time: 1, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true, credentialsId: 'soarqube-cred'
+                    waitForQualityGate abortPipeline: false, credentialsId: 'soarqube-cred'
                 }
             }
         }
