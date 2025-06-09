@@ -60,6 +60,13 @@ pipeline{
                 }
             }
         }
+        stage('Nexus Artifactory'){
+            steps{
+                withMaven(globalMavenSettingsConfig: 'chatapp', jdk: '', maven: 'maven3', mavenSettingsConfig: '', traceability: true) {
+                    sh 'mvn deploy -DskipTests'
+                }
+            }
+        }
     }
     post {
         always {
