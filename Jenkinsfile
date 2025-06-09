@@ -3,6 +3,9 @@ pipeline{
     tools {
         maven 'maven3'
     }
+    environment {
+        SCANNER_HOME = tool 'sonarqube-scanner'
+    }
 
     stages{
         stage('CleanWorkspace') {
@@ -34,11 +37,19 @@ pipeline{
                 }
             }
         }
-        stage('OWASP Dependency Scan') {
-            steps {
-                withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
-                    sh 'mkdir -p reports/dependency-check' // linux
-                    dependencyCheck additionalArguments: '''--scan ./ --out reports/dependency-check --project chatroom --format ALL --disableYarnAudit --disableNodeAudit --nvdApiKey ${NVD_API_KEY}''', odcInstallation: 'DP-Check'
+        // stage('OWASP Dependency Scan') {
+        //     steps {
+        //         withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
+        //             sh 'mkdir -p reports/dependency-check' // linux
+        //             dependencyCheck additionalArguments: '''--scan ./ --out reports/dependency-check --project chatroom --format ALL --disableYarnAudit --disableNodeAudit --nvdApiKey ${NVD_API_KEY}''', odcInstallation: 'DP-Check'
+        //         }
+        //     }
+        // }
+        stage('Sonarqube analysis'){
+            steps{
+                withSonarQubeEnv(credentialsId: 'soarqube-cred') {
+                    sh ''' ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=chatroom \
+                    -Dsonar.java.binaries=target -Dsonar.projectName=chatroom \ '''
                 }
             }
         }
