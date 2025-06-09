@@ -67,6 +67,11 @@ pipeline{
                 }
             }
         }
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t vootlasaicharan/chatroom:latest .'
+            }
+        }
     }
     post {
         always {
