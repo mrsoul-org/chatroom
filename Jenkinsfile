@@ -72,10 +72,31 @@ pipeline{
                 sh 'docker build -t vootlasaicharan/chatroom:latest .'
             }
         }
+        stage('Trivy Image Scan') {
+            steps {
+                sh ''' 
+                trivy image --severity LOW,MEDIUM,HIGH --format json -o trivy-HIGH-image.json vootlasaicharan/chatroom:latest \
+                trivy image --severity CRITICAL --format json -o trivy-CRITICAL-image.json vootlasaicharan/chatroom:latest 
+                '''
+            }
+            post {
+                always {
+                    // Convert JSON results to HTML
+                    sh ''' trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                    -o trivy-HIGH-image.html trivy-HIGH-image.json '''
+                    sh ''' trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/html.tpl" \ 
+                    -o trivy-CRITICAL-image.html trivy-CRITICAL-image.json '''
+                }
+            }
+        }
     }
     post {
         always {
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: './', reportFiles: 'trivy-fs.html', reportName: 'trivy fs HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: './', reportFiles: 'trivy-HIGH-image.html', reportName: 'trivy HIGH image HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: './', reportFiles: 'trivy-CRITICAL-image.html', reportName: 'trivy CRITICAL image HTML Report', reportTitles: '', useWrapperFileDirectly: true])
         }
     }
 }
