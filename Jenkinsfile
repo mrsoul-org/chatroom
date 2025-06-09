@@ -82,8 +82,19 @@ pipeline{
             post {
                 always {
                     // Convert JSON results to HTML
-                    sh ''' trivy convert --format template --template "@/usr/local/share/trivy/templates/html.tpl" -o trivy-HIGH-image.html trivy-HIGH-image.json 
-                    trivy convert --format template --template "@/usr/local/share/trivy/templates/html.tpl" -o trivy-CRITICAL-image.html trivy-CRITICAL-image.json '''
+                    sh ''' trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                    -o trivy-HIGH-image.html trivy-HIGH-image.json
+                    trivy convert \
+                    --format template --template "@/usr/local/share/trivy/templates/html.tpl" \
+                    -o trivy-CRITICAL-image.html trivy-CRITICAL-image.json '''
+                }
+            }
+        }
+        stage('Docker Push') {
+            steps {
+                withDockerRegistry(credentialsId: 'dockerhub-cred') {
+                    sh 'docker push vootlasaicharan/chatroom:latest'
                 }
             }
         }
