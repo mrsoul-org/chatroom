@@ -34,6 +34,14 @@ pipeline{
                 }
             }
         }
+        stage('OWASP Dependency Scan') {
+            steps {
+                withCredentials([string(credentialsId: 'nvd-api-key', variable: 'NVD_API_KEY')]) {
+                    sh 'mkdir -p reports/dependency-check' // linux
+                    dependencyCheck additionalArguments: '''--scan ./ --out reports/dependency-check --project chatroom --format ALL --disableYarnAudit --disableNodeAudit --nvdApiKey ${NVD_API_KEY}''', odcInstallation: 'DP-Check'
+                }
+            }
+        }
     }
     post {
         always {
