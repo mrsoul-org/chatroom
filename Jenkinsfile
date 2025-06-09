@@ -47,9 +47,9 @@ pipeline{
         // }
         stage('Sonarqube analysis'){
             steps{
-                withSonarQubeEnv(credentialsId: 'soarqube-cred') {
+                withSonarQubeEnv('soanrqube-server') {
                     sh ''' ${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectKey=chatroom \
-                    -Dsonar.java.binaries=target -Dsonar.projectName=chatroom \ '''
+                    -Dsonar.java.binaries=target -Dsonar.projectName=chatroom '''
                 }
             }
         }
