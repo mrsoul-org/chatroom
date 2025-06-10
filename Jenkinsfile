@@ -21,7 +21,7 @@ pipeline{
                     if (isMergeCommit) {
                         echo "PR Merge commit detected on master. Skipping pipeline."
                         currentBuild.result = 'SUCCESS'
-                        error('Stopping pipeline due to pr merge commit.')
+                        return // Gracefully exits the step without failing the build
                     }
                 }
             }
