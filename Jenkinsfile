@@ -69,7 +69,7 @@ pipeline{
         }
         stage('Docker Build') {
             steps {
-                sh 'docker build -t vootlasaicharan/chatroom:${BUILD_NUMBER} .'
+                sh 'docker build -t vootlasaicharan/chatroom-application:${BUILD_NUMBER} .'
             }
         }
         stage('Trivy Image Scan') {
@@ -92,7 +92,7 @@ pipeline{
         stage('Docker Push') {
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub-cred', url: 'https://index.docker.io/v1/')  {
-                    sh 'docker push vootlasaicharan/chatroom:${BUILD_NUMBER}'
+                    sh 'docker push vootlasaicharan/chatroom-application:${BUILD_NUMBER}'
                 }
             }
         }
@@ -106,7 +106,7 @@ pipeline{
                                 docker rm $(docker ps -aq) || true
                                 docker rmi $(docker images -q) || true
                             
-                                docker run --rm -itd --name chatroom-app -p 8080:8080 vootlasaicharan/chatroom:${BUILD_NUMBER}
+                                docker run --rm -itd --name chatroom-app -p 8080:8080 vootlasaicharan/chatroom-application:${BUILD_NUMBER}
                             "
                         '''
                     }
