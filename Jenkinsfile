@@ -117,26 +117,33 @@ pipeline{
             when {
                 branch 'PR*'
             }
-            steps{
+            steps {
                 script {
                     def DOCKER_IMAGE = "vootlasaicharan/chatroom-application:${BUILD_NUMBER}"
-                    def DEPLOYMENT_FILE = "chatroom/kubernetes/chatroom-application.yaml"
+                    def DEPLOYMENT_FILE = "kubernetes/chatroom-application.yaml"
+
+                    // Clone and enter the repo
                     sh 'git clone -b master https://github.com/mrsoul-org/chatroom.git'
-                    sh """
-                        sed -i 's|image: vootlasaicharan/chatroom-application:.*|image: ${DOCKER_IMAGE}|g' ${DEPLOYMENT_FILE}
-                        """
-        
-                    withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_CRED')]) {
+
+                    dir('chatroom') {
+                        // Update the YAML file
                         sh """
-                            git config --global user.name "vscharan"
-                            git config --global user.email "charanv369@gmail.com"
-                            git add ${DEPLOYMENT_FILE}
-                            git commit -m "Updated deployment image to ${DOCKER_IMAGE}"
-                            git push https://${GITHUB_CRED}@github.com/mrsoul-org/chatroom.git HEAD:master
+                            sed -i 's|image: vootlasaicharan/chatroom-application:.*|image: ${DOCKER_IMAGE}|g' ${DEPLOYMENT_FILE}
                         """
+
+                        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_CRED')]) {
+                            sh """
+                                git config --global user.name "vscharan"
+                                git config --global user.email "charanv369@gmail.com"
+                                git add ${DEPLOYMENT_FILE}
+                                git commit -m "Updated deployment image to ${DOCKER_IMAGE}"
+                                git push https://${GITHUB_CRED}@github.com/mrsoul-org/chatroom.git master
+                            """
+                        }
                     }
                 }
             }
+
         }
     }
     post {
