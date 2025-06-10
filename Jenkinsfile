@@ -69,13 +69,13 @@ pipeline{
         }
         stage('Docker Build') {
             steps {
-                sh 'docker build -t vootlasaicharan/chatroom:latest .'
+                sh 'docker build -t vootlasaicharan/chatroom:{BUILD_NUMBER} .'
             }
         }
         stage('Trivy Image Scan') {
             steps {
-                sh ''' trivy image --severity LOW,MEDIUM,HIGH --format json -o trivy-HIGH-image.json --exit-code 0 vootlasaicharan/chatroom-application:latest
-                trivy image --severity CRITICAL --format json -o trivy-CRITICAL-image.json --exit-code 0 vootlasaicharan/chatroom-application:latest'''
+                sh ''' trivy image --severity LOW,MEDIUM,HIGH --format json -o trivy-HIGH-image.json --exit-code 0 vootlasaicharan/chatroom-application:{BUILD_NUMBER}
+                trivy image --severity CRITICAL --format json -o trivy-CRITICAL-image.json --exit-code 0 vootlasaicharan/chatroom-application:{BUILD_NUMBER} '''
             }
             post {
                 always {
@@ -92,7 +92,7 @@ pipeline{
         stage('Docker Push') {
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub-cred', url: 'https://index.docker.io/v1/')  {
-                    sh 'docker push vootlasaicharan/chatroom:latest'
+                    sh 'docker push vootlasaicharan/chatroom:{BUILD_NUMBER}'
                 }
             }
         }
@@ -106,7 +106,7 @@ pipeline{
                                 docker rm $(docker ps -aq) || true
                                 docker rmi $(docker images -q) || true
                             
-                                docker run --rm -itd --name chatroom-app -p 8080:8080 vootlasaicharan/chatroom:latest
+                                docker run --rm -itd --name chatroom-app -p 8080:8080 vootlasaicharan/chatroom:${BUILD_NUMBER}
                             "
                         '''
                     }
