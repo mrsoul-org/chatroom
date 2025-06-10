@@ -69,13 +69,13 @@ pipeline{
         }
         stage('Docker Build') {
             steps {
-                sh 'docker build -t vootlasaicharan/chatroom:{BUILD_NUMBER} .'
+                sh 'docker build -t vootlasaicharan/chatroom:${BUILD_NUMBER} .'
             }
         }
         stage('Trivy Image Scan') {
             steps {
-                sh ''' trivy image --severity LOW,MEDIUM,HIGH --format json -o trivy-HIGH-image.json --exit-code 0 vootlasaicharan/chatroom-application:{BUILD_NUMBER}
-                trivy image --severity CRITICAL --format json -o trivy-CRITICAL-image.json --exit-code 0 vootlasaicharan/chatroom-application:{BUILD_NUMBER} '''
+                sh ''' trivy image --severity LOW,MEDIUM,HIGH --format json -o trivy-HIGH-image.json --exit-code 0 vootlasaicharan/chatroom-application:${BUILD_NUMBER}
+                trivy image --severity CRITICAL --format json -o trivy-CRITICAL-image.json --exit-code 0 vootlasaicharan/chatroom-application:${BUILD_NUMBER} '''
             }
             post {
                 always {
@@ -92,7 +92,7 @@ pipeline{
         stage('Docker Push') {
             steps {
                 withDockerRegistry(credentialsId: 'dockerhub-cred', url: 'https://index.docker.io/v1/')  {
-                    sh 'docker push vootlasaicharan/chatroom:{BUILD_NUMBER}'
+                    sh 'docker push vootlasaicharan/chatroom:${BUILD_NUMBER}'
                 }
             }
         }
@@ -102,7 +102,7 @@ pipeline{
                     withAWS(credentials: 'aws-cred', region: 'us-east-1') {
                         sh ''' 
                             ssh -o StrictHostKeyChecking=no ubuntu@3.84.82.241 "
-                                docker stop $(docekr ps -aq) || true
+                                docker stop $(docker ps -aq) || true
                                 docker rm $(docker ps -aq) || true
                                 docker rmi $(docker images -q) || true
                             
