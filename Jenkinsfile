@@ -121,20 +121,21 @@ pipeline{
                 script {
                     def DOCKER_IMAGE = "vootlasaicharan/chatroom-application:${BUILD_NUMBER}"
                     def DEPLOYMENT_FILE = "kubernetes/chatroom-application.yaml"
-                    sh 'git checkout master'
-                    sh 'git pull origin master'
-                    sh """
+                    sh 'git clone -b master https://github.com/mrsoul-org/chatroom.git'
+                    dir('chatroom/kubernetes') {
+                      sh """
                         sed -i 's|image: vootlasaicharan/chatroom-application:.*|image: ${DOCKER_IMAGE}|g' ${DEPLOYMENT_FILE}
-                    """
-        
-                    withCredentials([string(credentialsId: 'github-cred', variable: 'GITHUB_CRED')]) {
-                        sh """
-                            git config --global user.name "vscharan"
-                            git config --global user.email "charanv369@gmail.com"
-                            git add ${DEPLOYMENT_FILE}
-                            git commit -m "Updated deployment image to ${DOCKER_IMAGE}"
-                            git push https://${GITHUB_CRED}@github.com/mrsoul-org/chatroom.git HEAD:master
                         """
+        
+                        withCredentials([string(credentialsId: 'github-cred', variable: 'GITHUB_CRED')]) {
+                            sh """
+                                git config --global user.name "vscharan"
+                                git config --global user.email "charanv369@gmail.com"
+                                git add ${DEPLOYMENT_FILE}
+                                git commit -m "Updated deployment image to ${DOCKER_IMAGE}"
+                                git push https://${GITHUB_CRED}@github.com/mrsoul-org/chatroom.git HEAD:master
+                            """
+                        }
                     }
                 }
             }
