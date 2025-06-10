@@ -97,6 +97,9 @@ pipeline{
             }
         }
         stage('Deploy to EC2 Instance') {
+            when {
+                branch 'feature'
+            }
             steps {
                 sshagent(['aws-dev-instance']) {
                     withAWS(credentials: 'aws-cred', region: 'us-east-1') {
