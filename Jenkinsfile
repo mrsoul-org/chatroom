@@ -8,23 +8,6 @@ pipeline{
     // }
 
     stages{
-        stage('Exit on PR Merge Commit in Master') {
-            when {
-                branch 'master'
-            }
-            steps {
-                script {
-                    def isMergeCommit = sh(
-                        script: "git log -1 --pretty=%B | grep -q 'Merge pull request'",
-                        returnStatus: true
-                    ) == 0
-                    if (isMergeCommit) {
-                        echo "PR Merge commit detected on master. Skipping pipeline."
-                        currentBuild.result = 'SUCCESS'
-                    }
-                }
-            }
-        }
         stage('CleanWorkspace') {
             steps {
                 cleanWs()
@@ -135,7 +118,7 @@ pipeline{
         }
         stage('K8s Manifest file Update'){
             when {
-                branch 'PR*'
+                branch 'master'
             }
             steps {
                 script {
