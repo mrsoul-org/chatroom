@@ -121,7 +121,8 @@ pipeline{
                 script {
                     def DOCKER_IMAGE = "vootlasaicharan/chatroom-application:${BUILD_NUMBER}"
                     def DEPLOYMENT_FILE = "kubernetes/chatroom-application.yaml"
-        
+                    sh 'git checkout master'
+                    sh 'git pull origin master'
                     sh """
                         sed -i 's|image: vootlasaicharan/chatroom-application:.*|image: ${DOCKER_IMAGE}|g' ${DEPLOYMENT_FILE}
                     """
