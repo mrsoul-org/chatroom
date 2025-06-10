@@ -102,8 +102,8 @@ pipeline{
                     withAWS(credentials: 'aws-cred', region: 'us-east-1') {
                         sh ''' 
                             ssh -o StrictHostKeyChecking=no ubuntu@3.84.82.241 "
-                                docker stop $(docker ps -aq) || true
-                                docker rm $(docker ps -aq) || true
+                                docker stop chatroom-app || true
+                                docker rm chatroom-app || true
                                 docker rmi $(docker images -q) || true
                             
                                 docker run --rm -itd --name chatroom-app -p 8080:8080 vootlasaicharan/chatroom-application:${BUILD_NUMBER}
