@@ -126,7 +126,7 @@ pipeline{
                         sed -i 's|image: vootlasaicharan/chatroom-application:.*|image: ${DOCKER_IMAGE}|g' ${DEPLOYMENT_FILE}
                         """
         
-                    withCredentials([string(credentialsId: 'github-cred', variable: 'GITHUB_CRED')]) {
+                    withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_CRED')]) {
                         sh """
                             git config --global user.name "vscharan"
                             git config --global user.email "charanv369@gmail.com"
