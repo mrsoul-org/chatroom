@@ -126,9 +126,9 @@ pipeline{
                     def DEPLOYMENT_FILE = "kubernetes/chatroom-application.yaml"
 
                     // Clone and enter the repo
-                    sh 'git clone -b master https://github.com/mrsoul-org/chatroom.git'
+                    sh 'git clone -b master https://github.com/mrsoul-org/chatroom-k8s.git'
 
-                    dir('chatroom') {
+                    dir('chatroom-k8s') {
                         // Update the YAML file
                         sh """
                             sed -i 's|image: vootlasaicharan/chatroom-application:.*|image: ${DOCKER_IMAGE}|g' ${DEPLOYMENT_FILE}
@@ -140,7 +140,7 @@ pipeline{
                                 git config --global user.email "charanv369@gmail.com"
                                 git add ${DEPLOYMENT_FILE}
                                 git commit -m "Updated deployment image to ${DOCKER_IMAGE}"
-                                git push https://${GITHUB_CRED}@github.com/mrsoul-org/chatroom.git master
+                                git push https://${GITHUB_CRED}@github.com/mrsoul-org/chatroom-k8s.git master
                             """
                         }
                     }
