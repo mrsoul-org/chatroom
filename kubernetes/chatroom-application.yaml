@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp-deployment
+  name: chatapp
   labels:
-    app: myapp
+    app: chatapp
 spec:
   template:
     metadata:
       labels:
-        app: myapp
+        app: chatapp
     spec:
       containers:
-      - name: myapp-container
+      - name: chatapp
         image: vootlasaicharan/chatroom-application:latest
         ports:
         - containerPort: 8080
   replicas: 1
   selector:
     matchLabels:
-      app: myapp
+      app: chatapp
