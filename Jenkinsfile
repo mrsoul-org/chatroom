@@ -104,7 +104,7 @@ pipeline{
                 sshagent(['aws-dev-instance']) {
                     withAWS(credentials: 'aws-cred', region: 'us-east-1') {
                         sh ''' 
-                            ssh -o StrictHostKeyChecking=no ubuntu@3.85.243.243 "
+                            ssh -o StrictHostKeyChecking=no ubuntu@3.82.244.51 "
                                 docker stop chatroom-app || true
                                 docker rm chatroom-app || true
                                 docker rmi $(docker images -q) || true
@@ -134,13 +134,13 @@ pipeline{
                             sed -i 's|image: vootlasaicharan/chatroom-application:.*|image: ${DOCKER_IMAGE}|g' ${DEPLOYMENT_FILE}
                         """
 
-                        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_CRED')]) {
+                        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                             sh """
                                 git config --global user.name "vscharan"
                                 git config --global user.email "charanv369@gmail.com"
                                 git add ${DEPLOYMENT_FILE}
                                 git commit -m "Updated deployment image to ${DOCKER_IMAGE}"
-                                git push https://${GITHUB_CRED}@github.com/mrsoul-org/chatroom-k8s.git master
+                                git push https://${GITHUB_TOKEN}@github.com/mrsoul-org/chatroom-k8s.git master
                             """
                         }
                     }
